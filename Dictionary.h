@@ -1,7 +1,7 @@
 #ifndef DICTIONARY_H
 #define DICTIONARY_H
 
-//generic class that implements abstract interface of dictionary
+// classe generica abstrata do dictionary
 
 template <typename Key, typename Value>
 class Dictionary {

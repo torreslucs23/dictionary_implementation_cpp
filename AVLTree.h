@@ -4,6 +4,8 @@
 #include "NodeAVL.h"
 #include "Dictionary.h"
 
+// implementacao de interface da AVLTree, que sobreescreve metodos do dictionary
+
 template <typename Key, typename Value>
 class AVLTree : public Dictionary<Key, Value> {
 private:

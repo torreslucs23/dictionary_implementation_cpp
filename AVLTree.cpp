@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdexcept>
+#include <functional>
 #include "AVLTree.h"
 
 using namespace std;
@@ -41,7 +42,6 @@ template <typename Key, typename Value>
 NodeAVL<Key, Value>* AVLTree<Key, Value>::rightRotate(NodeAVL<Key, Value>* y) {
     NodeAVL<Key, Value>* x = y->left;
     NodeAVL<Key, Value>* T2 = x->right;
-
     x->right = y;
     y->left = T2;
 
@@ -56,7 +56,6 @@ template <typename Key, typename Value>
 NodeAVL<Key, Value>* AVLTree<Key, Value>::leftRotate(NodeAVL<Key, Value>* x) {
     NodeAVL<Key, Value>* y = x->right;
     NodeAVL<Key, Value>* T2 = y->left;
-
     y->left = x;
     x->right = T2;
 
@@ -74,13 +73,12 @@ NodeAVL<Key, Value>* AVLTree<Key, Value>::insert(NodeAVL<Key, Value>* node, cons
     if (key < node->key) node->left = insert(node->left, key, value);
     else if (key > node->key) node->right = insert(node->right, key, value);
     else {
-        node->value = value;  // Update value if key already exists
+        node->value = value;  
         return node;
     }
 
     node->height = 1 + max(height(node->left), height(node->right));
     int balance = getBalance(node);
-
     if (balance > 1 && key < node->left->key) return rightRotate(node);
     if (balance < -1 && key > node->right->key) return leftRotate(node);
     if (balance > 1 && key > node->left->key) {

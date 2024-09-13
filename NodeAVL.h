@@ -1,6 +1,8 @@
 #ifndef NODEAVL_H
 #define NODEAVL_H
 
+// implementacao node da AVLTree
+
 template <typename Key, typename Value>
 struct NodeAVL {
     Key key;
