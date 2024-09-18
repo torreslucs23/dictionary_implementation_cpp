@@ -3,14 +3,19 @@
 #include <stdexcept>
 #include <functional>
 
+
+//construtor
 template <typename Key, typename Value>
 RedBlackTree<Key, Value>::RedBlackTree() : root(nullptr), treeSize(0) {}
 
+
+//destrutor
 template <typename Key, typename Value>
 RedBlackTree<Key, Value>::~RedBlackTree() {
     clear(root);
 }
 
+//insere uma uma chave-valor na arvore
 template <typename Key, typename Value>
 void RedBlackTree<Key, Value>::insert(const Key& key, const Value& value) {
     NodeRBT<Key, Value>* node = new NodeRBT<Key, Value>(key, value);
@@ -41,6 +46,7 @@ void RedBlackTree<Key, Value>::insert(const Key& key, const Value& value) {
     treeSize++;
 }
 
+//faz o balanceamento da insercao
 template <typename Key, typename Value>
 void RedBlackTree<Key, Value>::fixInsert(NodeRBT<Key, Value>*& node) {
     NodeRBT<Key, Value>* parent = nullptr;
@@ -98,7 +104,7 @@ void RedBlackTree<Key, Value>::fixInsert(NodeRBT<Key, Value>*& node) {
 
 
 
-
+// rotacao a esquerda
 template <typename Key, typename Value>
 void RedBlackTree<Key, Value>::leftRotate(NodeRBT<Key, Value>*& node) {
     NodeRBT<Key, Value>* rightChild = node->right;
@@ -114,6 +120,8 @@ void RedBlackTree<Key, Value>::leftRotate(NodeRBT<Key, Value>*& node) {
     node->parent = rightChild;
 }
 
+
+// rotacao a direita
 template <typename Key, typename Value>
 void RedBlackTree<Key, Value>::rightRotate(NodeRBT<Key, Value>*& node) {
     NodeRBT<Key, Value>* leftChild = node->left;
@@ -129,6 +137,7 @@ void RedBlackTree<Key, Value>::rightRotate(NodeRBT<Key, Value>*& node) {
     node->parent = leftChild;
 }
 
+// apaga node pela chave
 template <typename Key, typename Value>
 void RedBlackTree<Key, Value>::erase(const Key& key) {
     if (root == nullptr) return;
@@ -142,7 +151,7 @@ void RedBlackTree<Key, Value>::erase(const Key& key) {
 
 
 
-
+//metodo aux para apagar node
 template <typename Key, typename Value>
 NodeRBT<Key, Value>* RedBlackTree<Key, Value>::eraseNode(NodeRBT<Key, Value>* node, const Key& key) {
     if (node == nullptr) return node;
@@ -177,6 +186,7 @@ NodeRBT<Key, Value>* RedBlackTree<Key, Value>::eraseNode(NodeRBT<Key, Value>* no
 }
 
 
+// metodo que encontra no na arvore
 template <typename Key, typename Value>
 NodeRBT<Key, Value>* RedBlackTree<Key, Value>::findNode(const Key& key) const {
     NodeRBT<Key, Value>* current = root;
@@ -188,6 +198,8 @@ NodeRBT<Key, Value>* RedBlackTree<Key, Value>::findNode(const Key& key) const {
     return nullptr;
 }
 
+
+// atualiza valor na arvore
 template <typename Key, typename Value>
 void RedBlackTree<Key, Value>::update(const Key& key, const Value& newValue) {
     NodeRBT<Key, Value>* node = findNode(key);
@@ -197,6 +209,8 @@ void RedBlackTree<Key, Value>::update(const Key& key, const Value& newValue) {
     node->value = newValue;
 }
 
+// retorna um no pela chave
+
 template <typename Key, typename Value>
 Value RedBlackTree<Key, Value>::get(const Key& key) const {
     NodeRBT<Key, Value>* node = findNode(key);
@@ -204,21 +218,27 @@ Value RedBlackTree<Key, Value>::get(const Key& key) const {
     return node->value;
 }
 
+// verifica se no esta contido na arvore
 template <typename Key, typename Value>
 bool RedBlackTree<Key, Value>::contains(const Key& key) const {
     return findNode(key) != nullptr;
 }
 
+//calcula tamanho da arvore
 template <typename Key, typename Value>
 int RedBlackTree<Key, Value>::size() const {
     return treeSize;
 }
 
+
+// verifica se arvore e vazia
 template <typename Key, typename Value>
 bool RedBlackTree<Key, Value>::empty() const {
     return root == nullptr;
 }
 
+
+// limpa arvore
 template <typename Key, typename Value>
 void RedBlackTree<Key, Value>::clear() {
     clear(root);
@@ -226,6 +246,8 @@ void RedBlackTree<Key, Value>::clear() {
     treeSize = 0;
 }
 
+
+// 
 template <typename Key, typename Value>
 void RedBlackTree<Key, Value>::clear(NodeRBT<Key, Value>* node) {
     if (node == nullptr) return;
@@ -234,13 +256,15 @@ void RedBlackTree<Key, Value>::clear(NodeRBT<Key, Value>* node) {
     delete node;
 }
 
+
+// metodo que percorre arvore inorder
 template <typename Key, typename Value>
 void RedBlackTree<Key, Value>::traverse() const {
     std::function<void(NodeRBT<Key, Value>*)> inOrder = [&](NodeRBT<Key, Value>* node) {
         if (node != nullptr) {
             inOrder(node->left);
-            std::cout << node->key << " -> " << node->value << " (Color: " 
-                      << (node->color == RED ? "Red" : "Black") << ")\n";
+            std::cout << node->key << ": " << node->value << " (Color: " 
+                      <<  ")\n";
             inOrder(node->right);
         }
     };

@@ -1,0 +1,15 @@
+para manipulação de palavras eu usei a biblioteca
+aslgorithm e cctype.
+
+metodo remove_if de algorithm que apaga elementos de pontuacao, menos
+o hifen.
+
+ispunct serve para verificar se o caracter é uma pontuacao <cctype>
+
+transform serve para transformar cada caracter de uma palavra em minusculo <algorithm>
+
+::tolower converte o caracter para minusculo <cctype>
+
+
+para rodar: ./freq avl texto.txt resultado.txt > resultado.txt
+compilar: g++ -std=c++11 -o freq main.cpp AVLTree.cpp RedBlackTree.cpp HashTable.cpp OpenHashTable.cpp

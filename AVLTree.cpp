@@ -5,17 +5,19 @@
 
 using namespace std;
 
-// Constructor: Initialize the AVL Tree with root as nullptr
+// implementacoes metodos avltree
+
+// construtor
 template <typename Key, typename Value>
 AVLTree<Key, Value>::AVLTree() : root(nullptr) {}
 
-// Destructor: Clear the tree
+// Destrutor
 template <typename Key, typename Value>
 AVLTree<Key, Value>::~AVLTree() {
     root = clear(root);
 }
 
-// Helper function to clear all nodes with recursion
+// limpa todos os nos
 template <typename Key, typename Value>
 NodeAVL<Key, Value>* AVLTree<Key, Value>::clear(NodeAVL<Key, Value>* node) {
     if (node == nullptr) return nullptr;
@@ -25,19 +27,19 @@ NodeAVL<Key, Value>* AVLTree<Key, Value>::clear(NodeAVL<Key, Value>* node) {
     return nullptr;
 }
 
-// Get the height of a node
+// pega altura de um no
 template <typename Key, typename Value>
 int AVLTree<Key, Value>::height(NodeAVL<Key, Value>* node) {
     return node ? node->height : 0;
 }
 
-// Get balance factor of a node
+// retorna fator de balanceamento de um no
 template <typename Key, typename Value>
 int AVLTree<Key, Value>::getBalance(NodeAVL<Key, Value>* node) {
     return node ? height(node->left) - height(node->right) : 0;
 }
 
-// Right rotation for balancing
+// Rotacao a direita impl
 template <typename Key, typename Value>
 NodeAVL<Key, Value>* AVLTree<Key, Value>::rightRotate(NodeAVL<Key, Value>* y) {
     NodeAVL<Key, Value>* x = y->left;
@@ -51,7 +53,7 @@ NodeAVL<Key, Value>* AVLTree<Key, Value>::rightRotate(NodeAVL<Key, Value>* y) {
     return x;
 }
 
-// Left rotation for balancing
+// Rotacao a esquerda impl
 template <typename Key, typename Value>
 NodeAVL<Key, Value>* AVLTree<Key, Value>::leftRotate(NodeAVL<Key, Value>* x) {
     NodeAVL<Key, Value>* y = x->right;
@@ -65,7 +67,7 @@ NodeAVL<Key, Value>* AVLTree<Key, Value>::leftRotate(NodeAVL<Key, Value>* x) {
     return y;
 }
 
-// Insert a new key-value pair into the AVL Tree
+// Insere um nova chave-valor na avl
 template <typename Key, typename Value>
 NodeAVL<Key, Value>* AVLTree<Key, Value>::insert(NodeAVL<Key, Value>* node, const Key& key, const Value& value) {
     if (node == nullptr) return new NodeAVL<Key, Value>(key, value);
@@ -93,13 +95,15 @@ NodeAVL<Key, Value>* AVLTree<Key, Value>::insert(NodeAVL<Key, Value>* node, cons
     return node;
 }
 
-// Public insert function
+// 
+//
+
 template <typename Key, typename Value>
 void AVLTree<Key, Value>::insert(const Key& key, const Value& value) {
     root = insert(root, key, value);
 }
 
-// Find the node with the minimum key value
+// encontra o no com o menor valor
 template <typename Key, typename Value>
 NodeAVL<Key, Value>* AVLTree<Key, Value>::minValueNode(NodeAVL<Key, Value>* node) {
     NodeAVL<Key, Value>* current = node;
@@ -108,7 +112,7 @@ NodeAVL<Key, Value>* AVLTree<Key, Value>::minValueNode(NodeAVL<Key, Value>* node
     return current;
 }
 
-// Find the node with the maximum key value
+// encontra o no com omaior valor
 template <typename Key, typename Value>
 NodeAVL<Key, Value>* AVLTree<Key, Value>::maxValueNode(NodeAVL<Key, Value>* node) {
     NodeAVL<Key, Value>* current = node;
@@ -117,7 +121,7 @@ NodeAVL<Key, Value>* AVLTree<Key, Value>::maxValueNode(NodeAVL<Key, Value>* node
     return current;
 }
 
-// Delete a node by key
+// apaga um no pela chave
 template <typename Key, typename Value>
 NodeAVL<Key, Value>* AVLTree<Key, Value>::erase(NodeAVL<Key, Value>* root, const Key& key) {
     if (root == nullptr) return root;
@@ -159,13 +163,13 @@ NodeAVL<Key, Value>* AVLTree<Key, Value>::erase(NodeAVL<Key, Value>* root, const
     return root;
 }
 
-// Public delete function
 template <typename Key, typename Value>
 void AVLTree<Key, Value>::erase(const Key& key) {
     root = erase(root, key);
 }
 
-// Retrieve value by key
+// retorna no pela chave
+// 
 template <typename Key, typename Value>
 Value AVLTree<Key, Value>::get(NodeAVL<Key, Value>* node, const Key& key) const {
     if (node == nullptr) throw std::runtime_error("Key not found");
@@ -174,20 +178,19 @@ Value AVLTree<Key, Value>::get(NodeAVL<Key, Value>* node, const Key& key) const 
     else return node->value;
 }
 
-// Public get function
 template <typename Key, typename Value>
 Value AVLTree<Key, Value>::get(const Key& key) const {
     return get(root, key);
 }
 
-// Update the value of an existing key
+// atualiza o valor por um chave existente
 template <typename Key, typename Value>
 void AVLTree<Key, Value>::update(const Key& key, const Value& value) {
     if (contains(key)) erase(key);
     insert(key, value);
 }
 
-// Check if a key exists in the tree
+// checa se uma chave existe na arvore
 template <typename Key, typename Value>
 bool AVLTree<Key, Value>::contains(NodeAVL<Key, Value>* node, const Key& key) const {
     if (node == nullptr) return false;
@@ -196,37 +199,35 @@ bool AVLTree<Key, Value>::contains(NodeAVL<Key, Value>* node, const Key& key) co
     else return true;
 }
 
-// Public contains function
 template <typename Key, typename Value>
 bool AVLTree<Key, Value>::contains(const Key& key) const {
     return contains(root, key);
 }
 
-// Calculate the size of the tree
+// tamanho da arvore
 template <typename Key, typename Value>
 int AVLTree<Key, Value>::size(NodeAVL<Key, Value>* node) const {
     if (node == nullptr) return 0;
     return 1 + size(node->left) + size(node->right);
 }
 
-// Public size function
 template <typename Key, typename Value>
 int AVLTree<Key, Value>::size() const {
     return size(root);
 }
 
-// Check if the tree is empty
+// verifica se arvore e vazia
 template <typename Key, typename Value>
 bool AVLTree<Key, Value>::empty() const {
     return root == nullptr;
 }
 
-// Traverse the tree in pre-order
+// percorre a arvore em pre-order
 template <typename Key, typename Value>
 void AVLTree<Key, Value>::traverse() const {
     std::function<void(NodeAVL<Key, Value>*)> preOrder = [&](NodeAVL<Key, Value>* node) {
         if (node != nullptr) {
-            std::cout << node->key << " -> " << node->value << std::endl;
+            std::cout << node->key << ": " << node->value << std::endl;
             preOrder(node->left);
             preOrder(node->right);
         }
@@ -235,7 +236,6 @@ void AVLTree<Key, Value>::traverse() const {
     preOrder(root);
 }
 
-// Public clear function
 template <typename Key, typename Value>
 void AVLTree<Key, Value>::clear() {
     root = clear(root);
