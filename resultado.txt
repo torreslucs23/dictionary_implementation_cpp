@@ -1,6 +1,5 @@
 Frequencias de palavras:
-ia: 1
-estavam: 1
+m: 1
 reino: 4
 todos: 1
 rei: 3
@@ -35,7 +34,8 @@ mostrá-lo: 3
 foi: 1
 que: 1
 havia: 2
+destruir: 1
 chamado: 1
 Resultados salvos em resultado.txt
-tempo de execucao: 0.000296256
-50
+tempo de execucao: 0.000122513
+Total de comparações: 68

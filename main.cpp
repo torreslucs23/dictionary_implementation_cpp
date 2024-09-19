@@ -34,6 +34,10 @@ double process_file(Dictionary<std::string, int>& dict, const std::string& input
         // metodo transform de algorithm e tolower de cctype
         std::transform(word.begin(), word.end(), word.begin(), ::tolower);
 
+        if (dict.size() == 1024){
+            break;
+        }
+
         if (!word.empty()) {
             if (dict.contains(word)) {
                 dict.update(word, dict.get(word) + 1);
@@ -65,7 +69,7 @@ void save_to_file(const Dictionary<std::string, int>& dict, const std::string& o
     dict.traverse();  // Isso irá imprimir no console. eu redirecionei a saída para o arquivo.
     output_file.close();
     std::cout << "Resultados salvos em " << output_filename << std::endl << "tempo de execucao: " << time << std::endl;
-    std::cout << dict.get_comparison_count();
+    std::cout << "Total de comparações: " << dict.get_comparison_count() << endl;
 }
 
 int main(int argc, char* argv[]) {
@@ -84,18 +88,18 @@ int main(int argc, char* argv[]) {
         OpenHashTable<std::string, int> dict;
         time = process_file(dict, input_filename);
         save_to_file(dict, output_filename, time);  
-    // } else if (dictionary_type == "hash") {
-    //     HashTable<std::string, int> dict;
-    //     time = process_file(dict, input_filename);
-    //     save_to_file(dict, output_filename, time);  
-    // } else if (dictionary_type == "avl") {
-    //     AVLTree<std::string, int> dict;
-    //     time = process_file(dict, input_filename);
-    //     save_to_file(dict, output_filename, time);  
-    // } else if (dictionary_type == "redblack") {
-    //     RedBlackTree<std::string, int> dict;
-    //     time = process_file(dict, input_filename);
-    //     save_to_file(dict, output_filename, time);  
+    } else if (dictionary_type == "hash") {
+        HashTable<std::string, int> dict;
+        time = process_file(dict, input_filename);
+        save_to_file(dict, output_filename, time);  
+    } else if (dictionary_type == "avl") {
+        AVLTree<std::string, int> dict;
+        time = process_file(dict, input_filename);
+        save_to_file(dict, output_filename, time);  
+    } else if (dictionary_type == "redblack") {
+        RedBlackTree<std::string, int> dict;
+        time = process_file(dict, input_filename);
+        save_to_file(dict, output_filename, time);  
     } else {
         std::cerr << "tipo de dicionario desconhecido: " << dictionary_type << std::endl;
         return 1;

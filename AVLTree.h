@@ -4,12 +4,12 @@
 #include "NodeAVL.h"
 #include "Dictionary.h"
 
-// implementacao de interface da AVLTree, que sobreescreve metodos do dictionary
-
+// implementação de interface da AVLTree, que sobreescreve métodos do dictionary
 template <typename Key, typename Value>
 class AVLTree : public Dictionary<Key, Value> {
 private:
     NodeAVL<Key, Value>* root;
+    mutable size_t comparison_count = 0; 
 
     NodeAVL<Key, Value>* insert(NodeAVL<Key, Value>* node, const Key& key, const Value& value);
     NodeAVL<Key, Value>* erase(NodeAVL<Key, Value>* node, const Key& key);
@@ -37,6 +37,9 @@ public:
     int size() const override;
     bool empty() const override;
     void traverse() const override;
+
+    size_t get_comparison_count() const override { return comparison_count; }
+    void reset_comparison_count() override { comparison_count = 0; }
 };
 
 #endif

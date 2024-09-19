@@ -19,13 +19,14 @@ OpenHashTable<Key, Value, Hash>::~OpenHashTable() {
 // incrementa comps
 template <typename Key, typename Value, typename Hash>
 void OpenHashTable<Key, Value, Hash>::insert(const Key& key, const Value& value) {
+    comparison_count++;
     if (static_cast<float>(m_number_of_elements) / m_table_size > m_load_factor) {
         rehash();
     }
 
     size_t index = hash_code(key);
     while (m_status[index] == OCCUPIED) {
-        comparison_count++;  // Incrementa a cada comparação
+        comparison_count++;  
         if (m_table[index].first == key) {
             throw std::invalid_argument("chave já existe");
         }
@@ -42,6 +43,7 @@ template <typename Key, typename Value, typename Hash>
 void OpenHashTable<Key, Value, Hash>::erase(const Key& key) {
     size_t index = hash_code(key);
     while (m_status[index] != EMPTY) {
+        comparison_count++;
         if (m_status[index] == OCCUPIED && m_table[index].first == key) {
             m_status[index] = DELETED;
             --m_number_of_elements;
@@ -58,7 +60,7 @@ template <typename Key, typename Value, typename Hash>
 Value OpenHashTable<Key, Value, Hash>::get(const Key& key) const {
     size_t index = hash_code(key);
     while (m_status[index] != EMPTY) {
-        comparison_count++;  // Incrementa a cada comparação
+        comparison_count++;  
         if (m_status[index] == OCCUPIED && m_table[index].first == key) {
             return m_table[index].second;
         }
@@ -73,6 +75,7 @@ template <typename Key, typename Value, typename Hash>
 void OpenHashTable<Key, Value, Hash>::update(const Key& key, const Value& value) {
     size_t index = hash_code(key);
     while (m_status[index] != EMPTY) {
+        comparison_count++;
         if (m_status[index] == OCCUPIED && m_table[index].first == key) {
             m_table[index].second = value;
             return;
@@ -83,12 +86,11 @@ void OpenHashTable<Key, Value, Hash>::update(const Key& key, const Value& value)
 }
 
 // verifica se a table possui a chave
-// incrementa o contador de comps
 template <typename Key, typename Value, typename Hash>
 bool OpenHashTable<Key, Value, Hash>::contains(const Key& key) const {
     size_t index = hash_code(key);
     while (m_status[index] != EMPTY) {
-        comparison_count++;  
+        comparison_count++; 
         if (m_status[index] == OCCUPIED && m_table[index].first == key) {
             return true;
         }
@@ -124,6 +126,7 @@ bool OpenHashTable<Key, Value, Hash>::empty() const {
 template <typename Key, typename Value, typename Hash>
 void OpenHashTable<Key, Value, Hash>::traverse() const {
     for (size_t i = 0; i < m_table_size; ++i) {
+        comparison_count++;
         if (m_status[i] == OCCUPIED) {
             std::cout << m_table[i].first << ": " << m_table[i].second << std::endl;
         }
@@ -144,9 +147,11 @@ void OpenHashTable<Key, Value, Hash>::rehash() {
     std::vector<SlotStatus> new_status(m_table_size, EMPTY);
 
     for (size_t i = 0; i < m_table.size(); ++i) {
+        comparison_count++;
         if (m_status[i] == OCCUPIED) {
             size_t index = hash_code(m_table[i].first);
             while (new_status[index] == OCCUPIED) {
+                comparison_count++;
                 index = (index + 1) % m_table_size;
             }
             new_table[index] = m_table[i];

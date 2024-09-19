@@ -21,11 +21,14 @@ public:
     void clear() override;
     void traverse() const override;
     void update(const Key& key, const Value& newValue) override; 
+    size_t get_comparison_count() const override { return comparison_count; }
+    void reset_comparison_count() override { comparison_count = 0; }
 
 
 private:
     NodeRBT<Key, Value>* root;
     int treeSize;
+    mutable size_t comparison_count = 0;
 
     void fixInsert(NodeRBT<Key, Value>*& node);
     void leftRotate(NodeRBT<Key, Value>*& node);

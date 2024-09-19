@@ -19,6 +19,7 @@ RedBlackTree<Key, Value>::~RedBlackTree() {
 template <typename Key, typename Value>
 void RedBlackTree<Key, Value>::insert(const Key& key, const Value& value) {
     NodeRBT<Key, Value>* node = new NodeRBT<Key, Value>(key, value);
+    comparison_count++;
     if (root == nullptr) {
         node->color = BLACK;
         root = node;
@@ -28,9 +29,11 @@ void RedBlackTree<Key, Value>::insert(const Key& key, const Value& value) {
 
         while (current != nullptr) {
             parent = current;
+            comparison_count++;
             if (key < current->key) current = current->left;
             else if (key > current->key) current = current->right;
             else {
+                comparison_count++;
                 current->value = value;
                 delete node;
                 return;
@@ -38,6 +41,7 @@ void RedBlackTree<Key, Value>::insert(const Key& key, const Value& value) {
         }
 
         node->parent = parent;
+        comparison_count++;
         if (key < parent->key) parent->left = node;
         else parent->right = node;
 
@@ -55,15 +59,18 @@ void RedBlackTree<Key, Value>::fixInsert(NodeRBT<Key, Value>*& node) {
     while (node != root && node->color != BLACK && node->parent->color == RED) {
         parent = node->parent;
         grandparent = parent->parent;
+        comparison_count++;
 
         if (parent == grandparent->left) {
             NodeRBT<Key, Value>* uncle = grandparent->right;
+            comparison_count++;
             if (uncle && uncle->color == RED) {
                 grandparent->color = RED;
                 parent->color = BLACK;
                 uncle->color = BLACK;
                 node = grandparent;
             } else {
+                comparison_count++;
                 if (node == parent->right) {
                     leftRotate(parent);
                     node = parent;
@@ -75,6 +82,7 @@ void RedBlackTree<Key, Value>::fixInsert(NodeRBT<Key, Value>*& node) {
             }
         } else {
             NodeRBT<Key, Value>* uncle = grandparent->left;
+            comparison_count++;
             if (uncle && uncle->color == RED) {
                 grandparent->color = RED;
 
@@ -83,6 +91,7 @@ void RedBlackTree<Key, Value>::fixInsert(NodeRBT<Key, Value>*& node) {
                 uncle->color = BLACK;
                 node = grandparent;
             } else {
+                comparison_count++;
                 if (node == parent->left) {
                     rightRotate(parent);
                     node = parent;
@@ -109,9 +118,11 @@ template <typename Key, typename Value>
 void RedBlackTree<Key, Value>::leftRotate(NodeRBT<Key, Value>*& node) {
     NodeRBT<Key, Value>* rightChild = node->right;
     node->right = rightChild->left;
+    comparison_count++;
     if (node->right != nullptr) node->right->parent = node;
     rightChild->parent = node->parent;
 
+    comparison_count++;
     if (node->parent == nullptr) root = rightChild;
     else if (node == node->parent->left) node->parent->left = rightChild;
     else node->parent->right = rightChild;
@@ -126,9 +137,11 @@ template <typename Key, typename Value>
 void RedBlackTree<Key, Value>::rightRotate(NodeRBT<Key, Value>*& node) {
     NodeRBT<Key, Value>* leftChild = node->left;
     node->left = leftChild->right;
+    comparison_count++;
     if (node->left != nullptr) node->left->parent = node;
     leftChild->parent = node->parent;
 
+    comparison_count++;
     if (node->parent == nullptr) root = leftChild;
     else if (node == node->parent->left) node->parent->left = leftChild;
     else node->parent->right = leftChild;
@@ -140,8 +153,10 @@ void RedBlackTree<Key, Value>::rightRotate(NodeRBT<Key, Value>*& node) {
 // apaga node pela chave
 template <typename Key, typename Value>
 void RedBlackTree<Key, Value>::erase(const Key& key) {
+    comparison_count++;
     if (root == nullptr) return;
 
+    comparison_count++;
     NodeRBT<Key, Value>* node = findNode(key);
     if (node == nullptr) throw std::runtime_error("chave não encontrada");
 
@@ -154,13 +169,17 @@ void RedBlackTree<Key, Value>::erase(const Key& key) {
 //metodo aux para apagar node
 template <typename Key, typename Value>
 NodeRBT<Key, Value>* RedBlackTree<Key, Value>::eraseNode(NodeRBT<Key, Value>* node, const Key& key) {
+    comparison_count++;
     if (node == nullptr) return node;
 
+    comparison_count++;
     if (key < node->key) node->left = eraseNode(node->left, key);
     else if (key > node->key) node->right = eraseNode(node->right, key);
     else {
+        comparison_count++;
         if (node->left == nullptr || node->right == nullptr) {
             NodeRBT<Key, Value>* temp = node->left ? node->left : node->right;
+            comparison_count++;
 
             if (temp == nullptr) {
                 temp = node;
@@ -179,6 +198,7 @@ NodeRBT<Key, Value>* RedBlackTree<Key, Value>::eraseNode(NodeRBT<Key, Value>* no
         }
     }
 
+    comparison_count++;
     if (node == nullptr) return node;
 
     fixInsert(node);
@@ -191,6 +211,7 @@ template <typename Key, typename Value>
 NodeRBT<Key, Value>* RedBlackTree<Key, Value>::findNode(const Key& key) const {
     NodeRBT<Key, Value>* current = root;
     while (current != nullptr) {
+        comparison_count++;
         if (key < current->key) current = current->left;
         else if (key > current->key) current = current->right;
         else return current;
@@ -203,6 +224,7 @@ NodeRBT<Key, Value>* RedBlackTree<Key, Value>::findNode(const Key& key) const {
 template <typename Key, typename Value>
 void RedBlackTree<Key, Value>::update(const Key& key, const Value& newValue) {
     NodeRBT<Key, Value>* node = findNode(key);
+    comparison_count++;
     if (node == nullptr) {
         throw std::runtime_error("chave não encontrada");
     }
@@ -214,6 +236,7 @@ void RedBlackTree<Key, Value>::update(const Key& key, const Value& newValue) {
 template <typename Key, typename Value>
 Value RedBlackTree<Key, Value>::get(const Key& key) const {
     NodeRBT<Key, Value>* node = findNode(key);
+    comparison_count++;
     if (node == nullptr) throw std::runtime_error("chave não encontrada");
     return node->value;
 }
@@ -263,8 +286,7 @@ void RedBlackTree<Key, Value>::traverse() const {
     std::function<void(NodeRBT<Key, Value>*)> inOrder = [&](NodeRBT<Key, Value>* node) {
         if (node != nullptr) {
             inOrder(node->left);
-            std::cout << node->key << ": " << node->value << " (Color: " 
-                      <<  ")\n";
+            std::cout << node->key << ": " << node->value <<  "\n";
             inOrder(node->right);
         }
     };

@@ -29,6 +29,7 @@ void HashTable<Key, Value, Hash>::insert(const Key& key, const Value& value) {
 
     size_t index = hash_code(key);
     for (auto& kvp : m_table[index]) {
+        comparison_count++;
         if (kvp.first == key) {
             throw std::invalid_argument("Key already exists");
         }
@@ -43,6 +44,7 @@ template <typename Key, typename Value, typename Hash>
 void HashTable<Key, Value, Hash>::erase(const Key& key) {
     size_t index = hash_code(key);
     for (auto it = m_table[index].begin(); it != m_table[index].end(); ++it) {
+        comparison_count++;
         if (it->first == key) {
             m_table[index].erase(it);
             --m_number_of_elements;
@@ -58,6 +60,7 @@ template <typename Key, typename Value, typename Hash>
 Value HashTable<Key, Value, Hash>::get(const Key& key) const {
     size_t index = hash_code(key);
     for (const auto& k : m_table[index]) {
+        comparison_count++;
         if (k.first == key) {
             return k.second;
         }
@@ -71,6 +74,7 @@ template <typename Key, typename Value, typename Hash>
 void HashTable<Key, Value, Hash>::update(const Key& key, const Value& value) {
     size_t index = hash_code(key);
     for (auto& kvp : m_table[index]) {
+        comparison_count++;
         if (kvp.first == key) {
             kvp.second = value;
             return;
@@ -85,6 +89,7 @@ template <typename Key, typename Value, typename Hash>
 bool HashTable<Key, Value, Hash>::contains(const Key& key) const {
     size_t index = hash_code(key);
     for (const auto& kvp : m_table[index]) {
+        comparison_count++;
         if (kvp.first == key) {
             return true;
         }
@@ -139,6 +144,7 @@ void HashTable<Key, Value, Hash>::rehash() {
 
     for (const auto& bucket : m_table) {
         for (const auto& kvp : bucket) {
+            comparison_count++;
             size_t index = hash_code(kvp.first);
             new_table[index].emplace_back(kvp);
         }

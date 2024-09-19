@@ -72,15 +72,20 @@ template <typename Key, typename Value>
 NodeAVL<Key, Value>* AVLTree<Key, Value>::insert(NodeAVL<Key, Value>* node, const Key& key, const Value& value) {
     if (node == nullptr) return new NodeAVL<Key, Value>(key, value);
 
-    if (key < node->key) node->left = insert(node->left, key, value);
-    else if (key > node->key) node->right = insert(node->right, key, value);
-    else {
-        node->value = value;  
+    comparison_count++;  // Incrementa contador de comparações
+    if (key < node->key) {
+        node->left = insert(node->left, key, value);
+    } else if (key > node->key) {
+        comparison_count++;  // Incrementa novamente 
+        node->right = insert(node->right, key, value);
+    } else {
+        node->value = value;
         return node;
     }
 
     node->height = 1 + max(height(node->left), height(node->right));
     int balance = getBalance(node);
+
     if (balance > 1 && key < node->left->key) return rightRotate(node);
     if (balance < -1 && key > node->right->key) return leftRotate(node);
     if (balance > 1 && key > node->left->key) {
@@ -94,6 +99,7 @@ NodeAVL<Key, Value>* AVLTree<Key, Value>::insert(NodeAVL<Key, Value>* node, cons
 
     return node;
 }
+
 
 // 
 //
@@ -124,14 +130,17 @@ NodeAVL<Key, Value>* AVLTree<Key, Value>::maxValueNode(NodeAVL<Key, Value>* node
 // apaga um no pela chave
 template <typename Key, typename Value>
 NodeAVL<Key, Value>* AVLTree<Key, Value>::erase(NodeAVL<Key, Value>* root, const Key& key) {
+    comparison_count++;
     if (root == nullptr) return root;
 
+    comparison_count++;
     if (key < root->key) root->left = erase(root->left, key);
     else if (key > root->key) root->right = erase(root->right, key);
     else {
+        comparison_count++;
         if ((root->left == nullptr) || (root->right == nullptr)) {
             NodeAVL<Key, Value> *temp = root->left ? root->left : root->right;
-
+            comparison_count++;
             if (temp == nullptr) {
                 temp = root;
                 root = nullptr;
@@ -174,7 +183,9 @@ void AVLTree<Key, Value>::erase(const Key& key) {
 // 
 template <typename Key, typename Value>
 Value AVLTree<Key, Value>::get(NodeAVL<Key, Value>* node, const Key& key) const {
+    comparison_count++;
     if (node == nullptr) throw std::runtime_error("Key not found");
+    comparison_count++;
     if (key < node->key) return get(node->left, key);
     else if (key > node->key) return get(node->right, key);
     else return node->value;

@@ -26,10 +26,13 @@ public:
     int size() const override;
     bool empty() const override;
     void traverse() const override;
+    size_t get_comparison_count() const override { return comparison_count; }
+    void reset_comparison_count() override { comparison_count = 0; }
 
 private:
     size_t hash_code(const Key& key) const;
     void rehash();
+    mutable size_t comparison_count = 0;
 
     std::vector<std::list<std::pair<Key, Value>>> m_table;
     size_t m_table_size;
