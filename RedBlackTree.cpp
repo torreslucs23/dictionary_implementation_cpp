@@ -143,7 +143,7 @@ void RedBlackTree<Key, Value>::erase(const Key& key) {
     if (root == nullptr) return;
 
     NodeRBT<Key, Value>* node = findNode(key);
-    if (node == nullptr) throw std::runtime_error("Key not found");
+    if (node == nullptr) throw std::runtime_error("chave não encontrada");
 
     root = eraseNode(root, key);
     treeSize--;
@@ -204,7 +204,7 @@ template <typename Key, typename Value>
 void RedBlackTree<Key, Value>::update(const Key& key, const Value& newValue) {
     NodeRBT<Key, Value>* node = findNode(key);
     if (node == nullptr) {
-        throw std::runtime_error("Key not found");
+        throw std::runtime_error("chave não encontrada");
     }
     node->value = newValue;
 }
@@ -214,7 +214,7 @@ void RedBlackTree<Key, Value>::update(const Key& key, const Value& newValue) {
 template <typename Key, typename Value>
 Value RedBlackTree<Key, Value>::get(const Key& key) const {
     NodeRBT<Key, Value>* node = findNode(key);
-    if (node == nullptr) throw std::runtime_error("Key not found");
+    if (node == nullptr) throw std::runtime_error("chave não encontrada");
     return node->value;
 }
 
@@ -247,7 +247,7 @@ void RedBlackTree<Key, Value>::clear() {
 }
 
 
-// 
+// limpa com passagem de no
 template <typename Key, typename Value>
 void RedBlackTree<Key, Value>::clear(NodeRBT<Key, Value>* node) {
     if (node == nullptr) return;

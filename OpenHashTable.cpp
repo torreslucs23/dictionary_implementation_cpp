@@ -16,6 +16,7 @@ OpenHashTable<Key, Value, Hash>::~OpenHashTable() {
 }
 
 // inserir uma chave-valor par
+// incrementa comps
 template <typename Key, typename Value, typename Hash>
 void OpenHashTable<Key, Value, Hash>::insert(const Key& key, const Value& value) {
     if (static_cast<float>(m_number_of_elements) / m_table_size > m_load_factor) {
@@ -24,15 +25,17 @@ void OpenHashTable<Key, Value, Hash>::insert(const Key& key, const Value& value)
 
     size_t index = hash_code(key);
     while (m_status[index] == OCCUPIED) {
+        comparison_count++;  // Incrementa a cada comparação
         if (m_table[index].first == key) {
-            throw std::invalid_argument("Key already exists");
+            throw std::invalid_argument("chave já existe");
         }
-        index = (index + 1) % m_table_size; 
+        index = (index + 1) % m_table_size;
     }
     m_table[index] = std::make_pair(key, value);
     m_status[index] = OCCUPIED;
     ++m_number_of_elements;
 }
+
 
 // apaga uma chave
 template <typename Key, typename Value, typename Hash>
@@ -46,21 +49,24 @@ void OpenHashTable<Key, Value, Hash>::erase(const Key& key) {
         }
         index = (index + 1) % m_table_size;
     }
-    throw std::out_of_range("Key not found");
+    throw std::out_of_range("Chave não encontrada");
 }
 
 // pega o valor associado a chave
+// incrementa comps
 template <typename Key, typename Value, typename Hash>
 Value OpenHashTable<Key, Value, Hash>::get(const Key& key) const {
     size_t index = hash_code(key);
     while (m_status[index] != EMPTY) {
+        comparison_count++;  // Incrementa a cada comparação
         if (m_status[index] == OCCUPIED && m_table[index].first == key) {
             return m_table[index].second;
         }
         index = (index + 1) % m_table_size;
     }
-    throw std::out_of_range("Key not found");
+    throw std::out_of_range("Chave não encontrada");
 }
+
 
 // Atualiza o valor de uma chave existente
 template <typename Key, typename Value, typename Hash>
@@ -73,14 +79,16 @@ void OpenHashTable<Key, Value, Hash>::update(const Key& key, const Value& value)
         }
         index = (index + 1) % m_table_size;
     }
-    throw std::out_of_range("Key not found");
+    throw std::out_of_range("Chave não encontrada");
 }
 
 // verifica se a table possui a chave
+// incrementa o contador de comps
 template <typename Key, typename Value, typename Hash>
 bool OpenHashTable<Key, Value, Hash>::contains(const Key& key) const {
     size_t index = hash_code(key);
     while (m_status[index] != EMPTY) {
+        comparison_count++;  
         if (m_status[index] == OCCUPIED && m_table[index].first == key) {
             return true;
         }
@@ -88,6 +96,7 @@ bool OpenHashTable<Key, Value, Hash>::contains(const Key& key) const {
     }
     return false;
 }
+
 
 template <typename Key, typename Value, typename Hash>
 void OpenHashTable<Key, Value, Hash>::clear() {

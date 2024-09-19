@@ -6,17 +6,21 @@
 
 
 
+// construtor da hashtable
 template <typename Key, typename Value, typename Hash>
 HashTable<Key, Value, Hash>::HashTable(size_t table_size, float load_factor)
     : m_table_size(table_size), m_load_factor(load_factor), m_number_of_elements(0) {
     m_table.resize(m_table_size);
 }
 
+
+// destrutor 
 template <typename Key, typename Value, typename Hash>
 HashTable<Key, Value, Hash>::~HashTable() {
     clear();
 }
 
+// metodo de inserir no na hash table
 template <typename Key, typename Value, typename Hash>
 void HashTable<Key, Value, Hash>::insert(const Key& key, const Value& value) {
     if (static_cast<float>(m_number_of_elements) / m_table_size > m_load_factor) {
@@ -33,6 +37,8 @@ void HashTable<Key, Value, Hash>::insert(const Key& key, const Value& value) {
     ++m_number_of_elements;
 }
 
+
+// metodo para apgar da hash table
 template <typename Key, typename Value, typename Hash>
 void HashTable<Key, Value, Hash>::erase(const Key& key) {
     size_t index = hash_code(key);
@@ -43,20 +49,24 @@ void HashTable<Key, Value, Hash>::erase(const Key& key) {
             return;
         }
     }
-    throw std::out_of_range("Key not found");
+    throw std::out_of_range("Chave não encontrada");
 }
 
+
+// metodo para pegr chave da hash table
 template <typename Key, typename Value, typename Hash>
 Value HashTable<Key, Value, Hash>::get(const Key& key) const {
     size_t index = hash_code(key);
-    for (const auto& kvp : m_table[index]) {
-        if (kvp.first == key) {
-            return kvp.second;
+    for (const auto& k : m_table[index]) {
+        if (k.first == key) {
+            return k.second;
         }
     }
-    throw std::out_of_range("Key not found");
+    throw std::out_of_range("Chave não encontrada");
 }
 
+
+// metodo que atualiza valor da hash table
 template <typename Key, typename Value, typename Hash>
 void HashTable<Key, Value, Hash>::update(const Key& key, const Value& value) {
     size_t index = hash_code(key);
@@ -66,9 +76,11 @@ void HashTable<Key, Value, Hash>::update(const Key& key, const Value& value) {
             return;
         }
     }
-    throw std::out_of_range("Key not found");
+    throw std::out_of_range("Chave não encontrada");
 }
 
+
+// verifica se chave está contida na hash table
 template <typename Key, typename Value, typename Hash>
 bool HashTable<Key, Value, Hash>::contains(const Key& key) const {
     size_t index = hash_code(key);
@@ -80,24 +92,30 @@ bool HashTable<Key, Value, Hash>::contains(const Key& key) const {
     return false;
 }
 
+// metodo para limpar
 template <typename Key, typename Value, typename Hash>
 void HashTable<Key, Value, Hash>::clear() {
-    for (auto& bucket : m_table) {
-        bucket.clear();
+    for (auto& b : m_table) {
+        b.clear();
     }
     m_number_of_elements = 0;
 }
 
+
+// retorna numero de elementos
 template <typename Key, typename Value, typename Hash>
 int HashTable<Key, Value, Hash>::size() const {
     return m_number_of_elements;
 }
 
+
+// verifica se esta vazio
 template <typename Key, typename Value, typename Hash>
 bool HashTable<Key, Value, Hash>::empty() const {
     return m_number_of_elements == 0;
 }
 
+// metodo para percorrer hash table e imprimir chaves e valores
 template <typename Key, typename Value, typename Hash>
 void HashTable<Key, Value, Hash>::traverse() const {
     for (const auto& bucket : m_table) {
@@ -107,11 +125,13 @@ void HashTable<Key, Value, Hash>::traverse() const {
     }
 }
 
+// gera hash code 
 template <typename Key, typename Value, typename Hash>
 size_t HashTable<Key, Value, Hash>::hash_code(const Key& key) const {
     return Hash{}(key) % m_table_size;
 }
 
+// metodo para fazer o rehash
 template <typename Key, typename Value, typename Hash>
 void HashTable<Key, Value, Hash>::rehash() {
     m_table_size *= 2;

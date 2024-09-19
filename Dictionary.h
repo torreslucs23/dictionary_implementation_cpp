@@ -1,8 +1,9 @@
+#include <cstddef>
+
 #ifndef DICTIONARY_H
 #define DICTIONARY_H
 
-// classe generica abstrata do dictionary
-
+// Classe genérica abstrata do dictionary
 template <typename Key, typename Value>
 class Dictionary {
 public:
@@ -16,7 +17,10 @@ public:
     virtual void clear() = 0;
     virtual int size() const = 0;
     virtual bool empty() const = 0;
-    virtual void traverse() const = 0;  
+    virtual void traverse() const = 0;
+
+    virtual size_t get_comparison_count() const = 0;  
+    virtual void reset_comparison_count() = 0;        
 };
 
 #endif

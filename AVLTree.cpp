@@ -144,8 +144,10 @@ NodeAVL<Key, Value>* AVLTree<Key, Value>::erase(NodeAVL<Key, Value>* root, const
         }
     }
 
-    if (root == nullptr) return root;
 
+    
+
+    if (root == nullptr) return root;
     root->height = 1 + max(height(root->left), height(root->right));
     int balance = getBalance(root);
 
