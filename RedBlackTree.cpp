@@ -273,6 +273,7 @@ void RedBlackTree<Key, Value>::clear() {
 // limpa com passagem de no
 template <typename Key, typename Value>
 void RedBlackTree<Key, Value>::clear(NodeRBT<Key, Value>* node) {
+    comparison_count++;
     if (node == nullptr) return;
     clear(node->left);
     clear(node->right);

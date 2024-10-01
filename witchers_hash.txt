@@ -518,5 +518,5 @@ prosperidade: 1
 usando: 1
 correndo: 1
 Resultados salvos em witchers_hash.txt
-tempo de execucao: 0.00139442
+tempo de execucao: 0.00417831
 Total de comparações: 3704
